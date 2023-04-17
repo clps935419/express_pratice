@@ -7,6 +7,15 @@ const roomSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "user", //連到user model
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      select: false,
+    },
     rating: Number,
   },
   {

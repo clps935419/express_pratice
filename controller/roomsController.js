@@ -1,8 +1,17 @@
 const RoomsModel = require("../model/roomsModel");
+const UsersModel = require("../model/usersModel");
 
 const roomsController = {
   async getAll(req, res, next) {
-    const rooms = await RoomsModel.find();
+    const timeSort = req.query.timeSort == "asc" ? "createdAt" : "-createdAt";
+    const q =
+      req.query.q !== undefined ? { name: new RegExp(req.query.q) } : {};
+    const rooms = await RoomsModel.find(q)
+      .populate({
+        path: "user", //這邊是去連結rooms的user欄位
+        select: "name photo", //要顯示的use資料表裡面的欄位
+      })
+      .sort(timeSort);
     res.status(200).json({ data: rooms });
   },
   async getOne(req, res, next) {
